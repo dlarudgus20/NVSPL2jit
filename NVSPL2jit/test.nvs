@@ -1,0 +1,74 @@
+# Copyright (c) 2015, ÀÓ°æÇö
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met :
+#
+# * Redistributions of source code must retain the above copyright notice, this
+# list of conditions and the following disclaimer.
+#
+# * Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and / or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED.IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# variables
+# 0 1 2 3 4 5 6 7 8
+# x i y j X Y a b c
+
+# x = 2, i = 8
+# for x=2 to 9, i=8 to 0
+,2F,8:
+
+ # y = 2, j = 8
+ # for x=2 to 9, j=8 to 0
+ F,2F,8:
+
+  BBB             # point to x
+  :-FFFF+F+BBBBB; # x ->+ X, Y
+  FFFFF           # point to Y
+  :-BBBBB+FFFFF;  # Y ->+ x
+
+  BBB                 # point to y
+  :-FFF+F+F+F+BBBBBB; # y ->+ Y, a, b, c
+  FFFFFF              # point to c
+  :-BBBBBB+FFFFFF;    # c ->+ y
+
+  # while ( --X != 0 )
+  BBBB-
+  :
+   FF                 # point to a
+   :-F+B;             # a ->+ b
+
+   B                  # point to Y
+   :-F+FF+BBB;        # Y ->+ a, c
+   FFF                # point to c
+   :-BBB+FFF;         # c ->+ Y
+
+  # end while
+  BBBB-;
+
+  # now b = x * y
+
+  BBBB IS FFFFF IS FF IE  # output x, y, b
+  OB OB OB OB             # clear X, Y, a, b
+
+ # end for
+ B+F-;B
+ OB
+
+# end for
+B+F-;
+
+# quit
+Q
